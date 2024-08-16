@@ -20,27 +20,29 @@ interface Args {
   initOptions?: Partial<InitOptions>;
 }
 
-export const getPayLoadClient = async ({ initOptions }: Args={}) => {
+export const getPayLoadClient = async ({ initOptions }: Args = {}) => {
   if (!process.env.PAYLOAD_SECRET) {
-    throw new Error("PAYLOAD_SECRET is missing")
+    throw new Error("PAYLOAD_SECRET is missing");
   }
 
-  if (cached.client) return cached.client
+  if (cached.client) {
+    return cached.client;
+  }
 
-  if (cached.promise) {
+  if (!cached.promise) {
     cached.promise = payload.init({
       secret: process.env.PAYLOAD_SECRET,
       local: initOptions?.express ? false : true,
-      ...(initOptions || {})
-    })
+      ...(initOptions || {}),
+    });
   }
 
   try {
-    cached.client = await cached.promise
+    cached.client = await cached.promise;
   } catch (error: unknown) {
-    cached.promise = null
-    throw error
+    cached.promise = null;
+    throw error;
   }
 
-  return cached.client
+  return cached.client;
 };

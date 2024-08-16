@@ -1,8 +1,13 @@
 import express from "express";
 import { getPayLoadClient } from "./getPayLoad";
 import { nextApp, nextHandler } from "./nextUtils";
+import dotenv from "dotenv"
+import path from "path";
 
 const app = express();
+dotenv.config({
+  path: path.resolve(__dirname, "../.env"),
+})
 const PORT = Number(process.env.PORT) || 3000;
 
 const start = async () => {
@@ -10,12 +15,14 @@ const start = async () => {
     initOptions: {
       express: app,
       onInit: async (cms) => {
-        cms.logger.info(`Admin URL: ${cms.getAdminURL}`)
+        cms.logger.info(`Admin URL ${cms.getAdminURL()}`)
       }
     }
   });
 
+  //middleware
   app.use((req, res) => nextHandler(req, res))
+
   nextApp.prepare().then(() => {
     payload.logger.info(`NextJs is started`)
 
