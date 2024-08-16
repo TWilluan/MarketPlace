@@ -25,7 +25,6 @@ const start = async () => {
 
   nextApp.prepare().then(() => {
     payload.logger.info(`NextJs is started`)
-
     app.listen(PORT, async () => {
       payload.logger.info(`NextJs APP URL: ${process.env.NEXT_PUBLIC_SERVER_URL}`)
     })
